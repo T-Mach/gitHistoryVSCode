@@ -9,7 +9,6 @@ import Dialog from '../../Dialog';
 
 type LogViewProps = {
     logEntries: LogEntries;
-    commitsRendered: typeof ResultActions.commitsRendered;
     onViewCommit: typeof ResultActions.selectCommit;
     actionCommit: typeof ResultActions.actionCommit;
     actionRef: typeof ResultActions.actionRef;
@@ -18,33 +17,14 @@ type LogViewProps = {
 interface LogViewState {}
 
 class LogView extends React.Component<LogViewProps, LogViewState> {
-    private ref: React.RefObject<LogEntryList>;
     private dialog: Dialog;
     constructor(props?: LogViewProps, context?: any) {
         super(props, context);
-        // this.state = { height: '', width: '', itemHeight: 0 };
-        this.ref = React.createRef<LogEntryList>();
     }
 
-    public componentDidUpdate() {
-        const el = this.ref.current.ref;
-
+    public componentWillUpdate(prevProp: LogViewProps) {
         if (this.props.logEntries.selected) {
             return;
-        }
-
-        if (
-            el.hasChildNodes() &&
-            this.props.logEntries &&
-            !this.props.logEntries.isLoading &&
-            !this.props.logEntries.isLoadingCommit &&
-            Array.isArray(this.props.logEntries.items) &&
-            this.props.logEntries.items.length > 0
-        ) {
-            // use the total height to be more accurate in positioning the dots from BranchGraph
-            const totalHeight = el.offsetHeight;
-            const logEntryHeight = totalHeight / this.props.logEntries.items.length;
-            this.props.commitsRendered(logEntryHeight);
         }
     }
 
@@ -53,12 +33,10 @@ class LogView extends React.Component<LogViewProps, LogViewState> {
             <div className="log-view" id="scrollCnt">
                 <BranchGraph></BranchGraph>
                 <LogEntryList
-                    ref={this.ref}
-                    logEntries={this.props.logEntries.items}
+                    onViewCommit={this.onViewCommit}
                     onAction={this.onAction}
                     onRefAction={this.onRefAction}
-                    onViewCommit={this.onViewCommit}
-                ></LogEntryList>
+                />
                 <Dialog ref={r => (this.dialog = r)} onOk={this.onDialogOk.bind(this)} />
             </div>
         );
@@ -162,7 +140,6 @@ function mapStateToProps(state: RootState, wrapper: { logEntries: LogEntries }) 
 
 function mapDispatchToProps(dispatch) {
     return {
-        commitsRendered: (height: number) => dispatch(ResultActions.commitsRendered(height)),
         onViewCommit: (hash: string) => dispatch(ResultActions.selectCommit(hash)),
         actionCommit: (logEntry: LogEntry, name: string, value = '') =>
             dispatch(ResultActions.actionCommit(logEntry, name, value)),

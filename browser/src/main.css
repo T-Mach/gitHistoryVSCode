@@ -394,7 +394,7 @@ div.details-view-cnt {
 	border-top-width: 1px;
 	border-top-style: solid;
 	border-top-color: var(--vscode-editorGroup-border);
-	bottom: 45px !important;
+	bottom: 0px !important;
 	top: unset !important;
 	padding: 1rem 1rem 0 1rem;
 }
@@ -618,4 +618,3 @@ a.file-name {
     outline: none;
     border: 1px solid var(--vscode-focusBorder);
 }
-
