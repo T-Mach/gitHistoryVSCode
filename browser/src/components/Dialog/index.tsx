@@ -129,7 +129,13 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
      * @param args optional arguments
      */
     public showMessage(title: string, description: string, args: any = undefined) {
-        this.setState({ show: true, title, description, input: false, buttons: DialogButtons.Ok });
+        this.setState({
+            show: true,
+            title,
+            description,
+            input: false,
+            buttons: DialogButtons.Ok,
+        });
         this.args = args;
     }
 
@@ -141,10 +147,19 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
      * @param args optional arguments
      */
     public showConfirm(title: string, description: string, args: any = undefined) {
-        this.setState({ show: true, title, description, input: false, buttons: DialogButtons.OkCancel }, () => {
-            const buttonEl = ReactDOM.findDOMNode(this.buttonOk) as HTMLButtonElement;
-            buttonEl.focus();
-        });
+        this.setState(
+            {
+                show: true,
+                title,
+                description,
+                input: false,
+                buttons: DialogButtons.OkCancel,
+            },
+            () => {
+                const buttonEl = ReactDOM.findDOMNode(this.buttonOk) as HTMLButtonElement;
+                buttonEl.focus();
+            },
+        );
         this.args = args;
     }
 
@@ -157,7 +172,14 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
      */
     public showInput(title: string, description: string, placeholder = '', args: any = undefined) {
         this.setState(
-            { show: true, input: true, title, description, placeholder, buttons: DialogButtons.OkCancel },
+            {
+                show: true,
+                input: true,
+                title,
+                description,
+                placeholder,
+                buttons: DialogButtons.OkCancel,
+            },
             () => {
                 this.inputField.focus();
                 this.inputField.select();
@@ -179,7 +201,11 @@ export default class Dialog extends React.Component<DialogProps, DialogState> {
                 <div>
                     <div>
                         <h4>{this.state.title}</h4>
-                        <div dangerouslySetInnerHTML={{ __html: this.state.description }}></div>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: this.state.description,
+                            }}
+                        ></div>
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '1em' }}>
                         <input

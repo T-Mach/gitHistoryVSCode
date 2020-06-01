@@ -68,7 +68,9 @@ export class GitFileHistoryCommandHandler implements IGitFileHistoryCommandHandl
             Uri.file(fileCommit.committedFile.uri.path),
             Uri.file(tmpFile.fsPath),
             title,
-            { preview: true },
+            {
+                preview: true,
+            },
         );
     }
 
@@ -102,7 +104,10 @@ export class GitFileHistoryCommandHandler implements IGitFileHistoryCommandHandl
         const previousTmpFile = await gitService.getCommitFile(previousCommitHash.full, previousFile);
 
         const title = this.getComparisonTitle(
-            { file: Uri.file(fileCommit.committedFile.uri.path), hash: fileCommit.logEntry.hash },
+            {
+                file: Uri.file(fileCommit.committedFile.uri.path),
+                hash: fileCommit.logEntry.hash,
+            },
             { file: Uri.file(previousFile.path), hash: previousCommitHash },
         );
         await this.commandManager.executeCommand('vscode.diff', previousTmpFile, tmpFile, title, { preview: true });
@@ -158,8 +163,14 @@ export class GitFileHistoryCommandHandler implements IGitFileHistoryCommandHandl
         const [leftFile, rightFile] = await Promise.all([leftFilePromise, rightFilePromise]);
 
         const title = this.getComparisonTitle(
-            { file: Uri.file(fileCommit.committedFile.uri.path), hash: fileCommit.logEntry.hash },
-            { file: Uri.file(fileCommit.committedFile.uri.path), hash: fileCommit.rightCommit.logEntry.hash },
+            {
+                file: Uri.file(fileCommit.committedFile.uri.path),
+                hash: fileCommit.logEntry.hash,
+            },
+            {
+                file: Uri.file(fileCommit.committedFile.uri.path),
+                hash: fileCommit.rightCommit.logEntry.hash,
+            },
         );
 
         await this.commandManager.executeCommand('vscode.diff', leftFile, rightFile, title, { preview: true });

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { ResultActions } from '../../../actions/results';
 import { LogEntries, LogEntry, Ref } from '../../../definitions';
 import { RootState } from '../../../reducers';
-import BranchGraph from '../BranchGraph';
 import LogEntryList from '../LogEntryList';
 import Dialog from '../../Dialog';
 
@@ -30,8 +29,7 @@ class LogView extends React.Component<LogViewProps, LogViewState> {
 
     public render() {
         return (
-            <div className="log-view" id="scrollCnt">
-                <BranchGraph></BranchGraph>
+            <div>
                 <LogEntryList
                     onViewCommit={this.onViewCommit}
                     onAction={this.onAction}
@@ -59,14 +57,22 @@ class LogView extends React.Component<LogViewProps, LogViewState> {
                 this.dialog.showConfirm(
                     `Remove branch ${ref.name}?`,
                     `Do you really want to remove the branch ${ref.name}?`,
-                    { logEntry, ref, name },
+                    {
+                        logEntry,
+                        ref,
+                        name,
+                    },
                 );
                 break;
             case 'removeRemote':
                 this.dialog.showConfirm(
                     `Remove remote branch ${ref.name}?`,
                     `Do you really want to remove the remote branch ${ref.name}?`,
-                    { logEntry, ref, name },
+                    {
+                        logEntry,
+                        ref,
+                        name,
+                    },
                 );
                 break;
         }

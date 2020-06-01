@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import { inject, injectable } from 'inversify';
 import * as path from 'path';
 import * as tmp from 'tmp';
-import { Uri } from 'vscode';
+import { Uri, Event } from 'vscode';
 import { cache } from '../../common/cache';
 import { IServiceContainer } from '../../ioc/types';
 import { ActionedUser, Branch, CommittedFile, Hash, IGitService, LogEntries, LogEntry, Ref, FsUri } from '../../types';
@@ -21,15 +21,20 @@ export class Git implements IGitService {
     private refHashesMap: Map<string, string> = new Map<string, string>();
     private readonly branchesService: GitBranchesService;
     private readonly remotesService: GitRemoteService;
+
+    public onStateChanged: Event<void>;
+
     constructor(
         private repo: Repository,
         @inject(IServiceContainer) private serviceContainer: IServiceContainer,
-        @inject(IGitCommandExecutor) private gitCmdExecutor: IGitCommandExecutor,
+        @inject(IGitCommandExecutor)
+        private gitCmdExecutor: IGitCommandExecutor,
         @inject(ILogParser) private logParser: ILogParser,
         @inject(IGitArgsService) private gitArgsService: IGitArgsService,
     ) {
         this.remotesService = new GitRemoteService(repo, this.gitCmdExecutor);
         this.branchesService = new GitBranchesService(repo, this.remotesService);
+        this.onStateChanged = this.repo.state.onDidChange;
     }
 
     /**
