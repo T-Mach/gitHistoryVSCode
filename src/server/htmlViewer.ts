@@ -99,7 +99,6 @@ export class HtmlViewer {
                 )}' />
             <title>Git History</title>
             <script type="text/javascript">
-                window['vscode'] = acquireVsCodeApi();
                 window['extensionPath'] = '${this.extensionPath}';
                 window['configuration'] = ${JSON.stringify(config)};
                 window['settings'] = ${JSON.stringify(settings)};
